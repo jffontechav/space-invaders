@@ -24,12 +24,12 @@ let changelevel;
 let enemyLevels = new Map();
 
 function preloadAllSounds() {
-  soundshoot = new Audio(audioRootPath + "shoot.wav");
-  soundshipdeath = new Audio(audioRootPath + "explosion.wav");
-  soundinvader = new Audio(audioRootPath + "invaderkilled.wav");
-  soundpowerup = new Audio(audioRootPath + "powerup.wav");
-  soundgameover = new Audio(audioRootPath + "GameOver.wav");
-  soundbrokenshield = new Audio(audioRootPath + "brokenshield.wav");
+  soundshoot = new loadSound(audioRootPath + "shoot.wav");
+  soundshipdeath = new loadSound(audioRootPath + "explosion.wav");
+  soundinvader = new loadSound(audioRootPath + "invaderkilled.wav");
+  soundpowerup = new loadSound(audioRootPath + "powerup.wav");
+  soundgameover = new loadSound(audioRootPath + "GameOver.wav");
+  soundbrokenshield = new loadSound(audioRootPath + "brokenshield.wav");
 }
 
 function preloadAllImages() {
@@ -177,11 +177,11 @@ function confignewlevel() {
     }
     for (let i = 0; i < enemies; i++) {
       if (imagesAlive === imagesAlienAAlive) {
-        Type = alienType.values()[0];
+        Type = Object.values(alienType)[0];
       } else if (imagesAlive === imagesAlienBAlive) {
-        Type = alienType.values()[1];
+        Type = Object.values(alienType)[1];
       } else {
-        Type = alienType.values()[2];
+        Type = Object.values(alienType)[2];
       }
       alienShipGrid[j][i] = new AlienShip(Type, createVector(100 + i * 80, 100 + j * 50), 32, 32, 3, imagesAlive, imagesDead);
     }
