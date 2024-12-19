@@ -54,8 +54,8 @@ function preloadAllImages() {
 
 
 function preload() {
-  spritesRootPath = "./data/spritesSI/";
-  audioRootPath = "./data/sounds/";
+  spritesRootPath = "./assets/sprites/";
+  audioRootPath = "./assets/sounds/";
   preloadAllSounds();
   preloadAllImages();
 }
@@ -290,12 +290,12 @@ function loadImages(spriteName) {
     let imagePath = spritesRootPath + spriteName + "_" + (i + 1) + ".png";
     console.log("cargando imagen: " + imagePath);
     let image = loadImage(imagePath, img => images.push(img), () => {});
-    if (image.width === 0) {
-      images.pop(); // Remove the empty image
+    console.log(image.width);
+    if (image.width === 1) {
+      //images.pop(); // Remove the empty image
       break;
     }
     i++;
   }
   return images;
 }
-
