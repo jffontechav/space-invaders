@@ -24,25 +24,25 @@ let changelevel;
 let enemyLevels = new Map();
 
 function preloadAllSounds() {
-  soundshoot = new loadSound(audioRootPath + "shoot.wav");
-  soundshipdeath = new loadSound(audioRootPath + "explosion.wav");
-  soundinvader = new loadSound(audioRootPath + "invaderkilled.wav");
-  soundpowerup = new loadSound(audioRootPath + "powerup.wav");
-  soundgameover = new loadSound(audioRootPath + "GameOver.wav");
-  soundbrokenshield = new loadSound(audioRootPath + "brokenshield.wav");
+  soundshoot = loadSound(audioRootPath + "shoot.wav");
+  soundshipdeath = loadSound(audioRootPath + "explosion.wav");
+  soundinvader = loadSound(audioRootPath + "invaderkilled.wav");
+  soundpowerup = loadSound(audioRootPath + "powerup.wav");
+  soundgameover = loadSound(audioRootPath + "GameOver.wav");
+  soundbrokenshield = loadSound(audioRootPath + "brokenshield.wav");
 }
 
 function preloadAllImages() {
   fondo = loadImage(spritesRootPath + "fondo.jpg");
   fondo.resize(width, height);
-  imagesShipAlive = loadImages("ship");
-  imagesShipDead = loadImages("shipDead");
-  imagesAlienAAlive = loadImages("alienA");
-  imagesAlienADead = loadImages("alienDead");
-  imagesAlienBAlive = loadImages("alienB");
-  imagesAlienBDead = loadImages("alienDead");
-  imagesAlienCAlive = loadImages("alienC");
-  imagesAlienCDead = loadImages("alienDead");
+  imagesShipAlive = loadImages("ship", 1);
+  imagesShipDead = loadImages("shipDead", 1);
+  imagesAlienAAlive = loadImages("alienA", 2);
+  imagesAlienADead = loadImages("alienDead", 1);
+  imagesAlienBAlive = loadImages("alienB",2);
+  imagesAlienBDead = loadImages("alienDead",1);
+  imagesAlienCAlive = loadImages("alienC",2);
+  imagesAlienCDead = loadImages("alienDead",1);
   shield = loadImage(spritesRootPath + "shield.png");
   cadency = loadImage(spritesRootPath + "cadency.png");
   doublepoints = loadImage(spritesRootPath + "doublepoints.png");
@@ -54,8 +54,8 @@ function preloadAllImages() {
 
 
 function preload() {
-  spritesRootPath = "./assets/sprites/";
-  audioRootPath = "./assets/sounds/";
+  spritesRootPath = "/assets/sprites/";
+  audioRootPath = "/assets/sounds/";
   preloadAllSounds();
   preloadAllImages();
 }
@@ -283,19 +283,16 @@ function WinScreen() {
   text("Presiona cualquier tecla para volver al inicio", width / 2, height / 2 + 50);
 }
 
-function loadImages(spriteName) {
-  let images = [];
-  let i = 0;
-  while (true) {
-    let imagePath = spritesRootPath + spriteName + "_" + (i + 1) + ".png";
-    console.log("cargando imagen: " + imagePath);
-    let image = loadImage(imagePath, img => images.push(img), () => {});
-    console.log(image.width);
-    if (image.width === 1) {
-      //images.pop(); // Remove the empty image
-      break;
-    }
-    i++;
+function loadImages(spriteName, n_images, i = 0, images = []) {
+  if(i == n_images){
+    return images;
   }
-  return images;
+  let imagePath = spritesRootPath + spriteName + "_" + (i+1) + ".png";
+  loadImage(imagePath, 
+    (img) => {
+      images.push(img);
+      images = loadImages(spriteName, n_images, i+1, images);
+    },
+    () => "is this fails the whole thing breaks :)");
+  return images
 }
