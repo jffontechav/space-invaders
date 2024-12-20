@@ -58,18 +58,31 @@ class AlienShipGroup {
       }
     }
   
-    freezealienshipgorup() {
+    freezealienshipgroup() {
       this.isFrozen = true;
+      let velocitiesBackup = []; // Para almacenar las velocidades originales de los alienígenas
+      
       for (let i = 0; i < this.alienShipGrid.length; i++) {
         for (let j = 0; j < this.alienShipGrid[i].length; j++) {
           let alien = this.alienShipGrid[i][j];
           if (alien != null) {
-            if (this.oldvelocity == 0) this.oldvelocity = alien.vel.x;
-            alien.vel.x = 0;
+            // Almacenar la velocidad original si aún no lo hemos hecho
+            velocitiesBackup.push({ alien: alien, velocity: alien.vel.x });
+            alien.vel.x = 0; // Detenemos el movimiento de los alienígenas
           }
         }
       }
-    }
+      
+      // Restaurar las velocidades después de un tiempo (3 segundos en este ejemplo)
+      setTimeout(() => {
+        this.isFrozen = false;
+        velocitiesBackup.forEach(({ alien, velocity }) => {
+          if (alien != null) {
+            alien.vel.x = velocity; // Restauramos la velocidad original
+          }
+        });
+      }, 3000); // 3000 ms = 3 segundos
+    }    
   
     restorevelocity() {
       for (let i = 0; i < this.alienShipGrid.length; i++) {
