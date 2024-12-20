@@ -123,48 +123,51 @@ class Ship {
           if (!this.speedBoostActive) {
             this.speedBoostActive = true;
             this.speedBoostStartTime = millis();
-            this.originalMaxVelocity = this.maxVelocity; // Almacenar el valor original
+            this.originalMaxVelocity = this.maxVelocity; // Almacenar la velocidad original
             this.maxVelocity += 3; // Incrementar la velocidad máxima
           }
           break;
-  
+    
         case PowerUpType.CADENCY:
           if (this.shootDelay > this.minShootDelay) {
             this.shootDelay -= 100;
           }
           break;
-  
+    
         case PowerUpType.DOUBLE_POINTS:
-          doublePointsActivation = millis();
           doublePoints = true; // Activar puntos dobles
+          doublePointsActivation = millis();
           break;
-  
+    
         case PowerUpType.FREEZE:
           alienGroup.freezeActivation = millis();
-          alienGroup.freezealienshipgroup(); // Asegurar que este método funcione correctamente
+          alienGroup.freezealienshipgroup(); // Congelar alienígenas
           break;
-  
-        case PowerUpType.SPEED:
-          this.speedBoostActive = true;
-          this.speedBoostStartTime = millis();
-          this.maxVelocity += 3;
-          break;
-  
+    
         case PowerUpType.NOENEMYBULLETS:
-          enemyBullets = [];
+          enemyBullets = []; // Eliminar balas enemigas
           break;
-  
+    
         case PowerUpType.EXTRA_LIFE:
           this.lifes++;
           break;
-        }
-      
-        // Validar y eliminar el power-up del arreglo global
-        let index = powerUps.indexOf(power);
-        if (index !== -1) {
-          powerUps.splice(index, 1);
-        }
+    
+        case PowerUpType.SHIELD:
+          this.hasShield = true;
+          this.shieldActivation = millis();
+          break;
+    
+        default:
+          console.warn("Tipo de power-up desconocido:", power.type);
+          break;
       }
+    
+      // Eliminar el power-up del arreglo global
+      let index = powerUps.indexOf(power);
+      if (index !== -1) {
+        powerUps.splice(index, 1);
+      }
+    }    
   
     startDeathAnimation() {
       this.isDead = true;
@@ -200,14 +203,19 @@ class Ship {
       if (!this.isDead) this.shoot();
     
       // Desactivar el escudo si el tiempo ha expirado
-      if (millis() - this.shieldActivation > this.shieldDuration) {
+      if (this.hasShield && millis() - this.shieldActivation > this.shieldDuration) {
         this.hasShield = false;
       }
     
-      // Gestionar el efecto SPEED
+      // Desactivar el efecto SPEED
       if (this.speedBoostActive && millis() - this.speedBoostStartTime > this.speedBoostDuration) {
         this.speedBoostActive = false;
         this.maxVelocity = this.originalMaxVelocity; // Restaurar la velocidad original
+      }
+    
+      // Desactivar puntos dobles
+      if (doublePoints && millis() - doublePointsActivation > doublePointsDuration) {
+        doublePoints = false;
       }
     
       // Controlar el cambio de estado de la imagen de la nave
@@ -215,7 +223,7 @@ class Ship {
         this.imageState = (this.imageState + 1) % this.maxImageStates;
         this.prevMillis = millis();
       }
-    }    
+    }     
   
     render() {
       if (this.isDead) {

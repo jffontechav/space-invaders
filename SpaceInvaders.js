@@ -198,14 +198,16 @@ function setupEnemiesForLevel() {
 }
 
 function renderPowerUps() {
-  powerUps.forEach((power, index) => {
+  for (let i = powerUps.length - 1; i >= 0; i--) {
+    let power = powerUps[i];
     power.update();
     power.render();
-    // Eliminar power-ups que hayan sido consumidos o estén fuera de la pantalla
+
+    // Eliminar power-ups consumidos o fuera de pantalla
     if (power.pos.y > height || !power.active) {
-      powerUps.splice(index, 1);
+      powerUps.splice(i, 1);
     }
-  });
+  }
 }
 
 function showLifes() {
