@@ -119,9 +119,13 @@ class Ship {
   
     usePower(power) {
       switch (power.type) {
-        case PowerUpType.SHIELD:
-          this.shieldActivation = millis();
-          this.hasShield = true;
+        case PowerUpType.SPEED:
+          if (!this.speedBoostActive) {
+            this.speedBoostActive = true;
+            this.speedBoostStartTime = millis();
+            this.originalMaxVelocity = this.maxVelocity; // Almacenar el valor original
+            this.maxVelocity += 3; // Incrementar la velocidad máxima
+          }
           break;
   
         case PowerUpType.CADENCY:
@@ -132,7 +136,7 @@ class Ship {
   
         case PowerUpType.DOUBLE_POINTS:
           doublePointsActivation = millis();
-          doublePoints = true;
+          doublePoints = true; // Activar puntos dobles
           break;
   
         case PowerUpType.FREEZE:
@@ -153,9 +157,14 @@ class Ship {
         case PowerUpType.EXTRA_LIFE:
           this.lifes++;
           break;
+        }
+      
+        // Validar y eliminar el power-up del arreglo global
+        let index = powerUps.indexOf(power);
+        if (index !== -1) {
+          powerUps.splice(index, 1);
+        }
       }
-      powerUps.splice(powerUps.indexOf(power), 1);
-    }
   
     startDeathAnimation() {
       this.isDead = true;
@@ -187,19 +196,26 @@ class Ship {
       this.vel.add(this.acc).limit(this.maxVelocity);
       this.pos.add(this.vel);
       this.collision();
+    
       if (!this.isDead) this.shoot();
+    
+      // Desactivar el escudo si el tiempo ha expirado
       if (millis() - this.shieldActivation > this.shieldDuration) {
         this.hasShield = false;
       }
+    
+      // Gestionar el efecto SPEED
       if (this.speedBoostActive && millis() - this.speedBoostStartTime > this.speedBoostDuration) {
         this.speedBoostActive = false;
-        this.maxVelocity -= 3;
+        this.maxVelocity = this.originalMaxVelocity; // Restaurar la velocidad original
       }
+    
+      // Controlar el cambio de estado de la imagen de la nave
       if (millis() - this.prevMillis > this.imageDelay) {
         this.imageState = (this.imageState + 1) % this.maxImageStates;
         this.prevMillis = millis();
       }
-    }
+    }    
   
     render() {
       if (this.isDead) {
@@ -219,10 +235,10 @@ class Ship {
           stroke(255, 0, 0);
           strokeWeight(2);
           noFill();
-          rect(this.pos.x - 5, this.pos.y - 5, this.s_width + 10, this.s_height + 10); // Efecto visual para velocidad
+          ellipse(this.pos.x + this.s_width / 2, this.pos.y + this.s_height / 2, this.s_width + 20); // Efecto visual de velocidad
         }
         image(this.imagesAlive[this.imageState], this.pos.x, this.pos.y, this.s_width, this.s_height);
         pop();
       }
-    }
+    }    
   }

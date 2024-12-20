@@ -18,10 +18,12 @@ class AlienShipGroup {
   
     update() {
       let aliensAlive = false;
-      if (millis() - this.freezeActivation > this.freezeDuration && this.isFrozen) {
+    
+      // Verificar si el efecto de congelamiento ha expirado
+      if (this.isFrozen && millis() - this.freezeActivation > this.freezeDuration) {
         this.restorevelocity();
       }
-  
+    
       for (let i = 0; i < this.alienShipGrid.length; i++) {
         for (let j = 0; j < this.alienShipGrid[i].length; j++) {
           let alienShip = this.alienShipGrid[i][j];
@@ -32,7 +34,7 @@ class AlienShipGroup {
             }
             push();
             if (this.isFrozen) {
-              tint(0, 0, 200);
+              tint(0, 0, 200); // Efecto visual para alienígenas congelados
             }
             alienShip.render();
             pop();
@@ -46,8 +48,9 @@ class AlienShipGroup {
           }
         }
       }
+    
       if (!aliensAlive) win();
-  
+    
       if ((this.reachedRightEdge() && this.movingRight) || (this.reachedLeftEdge() && !this.movingRight)) {
         this.movingRight = !this.movingRight;
         this.change_direction();
@@ -56,46 +59,36 @@ class AlienShipGroup {
       if (this.reachedSpaceCraftPos()) {
         gameOver();
       }
-    }
-  
-    freezealienshipgroup() {
-      this.isFrozen = true;
-      let velocitiesBackup = []; // Para almacenar las velocidades originales de los alienígenas
-      
-      for (let i = 0; i < this.alienShipGrid.length; i++) {
-        for (let j = 0; j < this.alienShipGrid[i].length; j++) {
-          let alien = this.alienShipGrid[i][j];
-          if (alien != null) {
-            // Almacenar la velocidad original si aún no lo hemos hecho
-            velocitiesBackup.push({ alien: alien, velocity: alien.vel.x });
-            alien.vel.x = 0; // Detenemos el movimiento de los alienígenas
-          }
-        }
-      }
-      
-      // Restaurar las velocidades después de un tiempo (3 segundos en este ejemplo)
-      setTimeout(() => {
-        this.isFrozen = false;
-        velocitiesBackup.forEach(({ alien, velocity }) => {
-          if (alien != null) {
-            alien.vel.x = velocity; // Restauramos la velocidad original
-          }
-        });
-      }, 3000); // 3000 ms = 3 segundos
     }    
   
-    restorevelocity() {
-      for (let i = 0; i < this.alienShipGrid.length; i++) {
-        for (let j = 0; j < this.alienShipGrid[i].length; j++) {
-          let alien = this.alienShipGrid[i][j];
-          if (alien != null) {
-            alien.vel.x = this.oldvelocity;
+    freezealienshipgroup() {
+      if (!this.isFrozen) {
+        this.isFrozen = true;
+        this.oldVelocities = []; // Almacena las velocidades originales
+        for (let i = 0; i < this.alienShipGrid.length; i++) {
+          for (let j = 0; j < this.alienShipGrid[i].length; j++) {
+            let alien = this.alienShipGrid[i][j];
+            if (alien != null) {
+              this.oldVelocities.push({ alien: alien, velocity: alien.vel.x });
+              alien.vel.x = 0; // Congela al alienígena
+            }
           }
         }
+        this.freezeActivation = millis(); // Marca el inicio del congelamiento
       }
-      this.oldvelocity = 0;
-      this.isFrozen = false;
-    }
+    }       
+  
+    restorevelocity() {
+      if (this.isFrozen && this.oldVelocities) {
+        this.oldVelocities.forEach(({ alien, velocity }) => {
+          if (alien != null) {
+            alien.vel.x = velocity; // Restaura la velocidad original
+          }
+        });
+        this.oldVelocities = []; // Limpia el respaldo
+        this.isFrozen = false;
+      }
+    }    
   
     alienShoots(alien2) {
       for (let alien of this.alienShoot) {

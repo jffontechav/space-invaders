@@ -198,11 +198,14 @@ function setupEnemiesForLevel() {
 }
 
 function renderPowerUps() {
-  powerUps.forEach((power) => {
+  powerUps.forEach((power, index) => {
     power.update();
     power.render();
+    // Eliminar power-ups que hayan sido consumidos o estén fuera de la pantalla
+    if (power.pos.y > height || !power.active) {
+      powerUps.splice(index, 1);
+    }
   });
-  powerUps = powerUps.filter(power => power.pos.y <= height);
 }
 
 function showLifes() {
@@ -223,8 +226,11 @@ function showScore() {
   textSize(16);
   text("HIGH-SCORE: " + highScore, width / 2, height * 0.01);
   text("LEVEL " + level, width * 0.95, height * 0.01);
+
+  // Mostrar indicador visual de puntos dobles
   if (doublePoints) {
-    text("POINTS X2 ", width * 0.25, height * 0.01);
+    fill(255, 215, 0); // Color dorado para destacar
+    text("POINTS X2!", width * 0.25, height * 0.01);
   }
 }
 
