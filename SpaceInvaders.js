@@ -55,7 +55,7 @@ function preloadAllImages() {
 
 function preload() {
   spritesRootPath = "/sprites/";
-  audioRootPath = "/assets/sounds/";
+  audioRootPath = "/sounds/";
   preloadAllSounds();
   preloadAllImages();
 }
