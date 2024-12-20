@@ -199,14 +199,15 @@ function setupEnemiesForLevel() {
 
 function renderPowerUps() {
   for (let i = powerUps.length - 1; i >= 0; i--) {
-    let power = powerUps[i];
-    power.update();
-    power.render();
+      let power = powerUps[i];
+      power.update();
+      power.render();
 
-    // Eliminar power-ups consumidos o fuera de pantalla
-    if (power.pos.y > height || !power.active) {
-      powerUps.splice(i, 1);
-    }
+      // Eliminar power-ups fuera de pantalla o consumidos
+      if (power.pos.y > height || !power.active) {
+          console.log(`Power-up ${power.type} eliminado.`);
+          powerUps.splice(i, 1);
+      }
   }
 }
 

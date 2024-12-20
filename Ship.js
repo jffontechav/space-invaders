@@ -1,3 +1,9 @@
+// Duraciones globales de los power-ups
+const DURATION_SHIELD = 5000; // Duración del escudo
+const DURATION_SPEED = 5000; // Duración del boost de velocidad
+const DURATION_FREEZE = 5000; // Duración del congelamiento
+const DURATION_DOUBLE_POINTS = 5000; // Duración de puntos dobles
+
 class Ship {
   constructor(pos, s_height, s_width, lifes, imagesAlive, imagesDead) {
     this.pos = pos.copy();
@@ -118,56 +124,68 @@ class Ship {
     }
   
     usePower(power) {
+      console.log("Power-up capturado:", power.type);
       switch (power.type) {
-        case PowerUpType.SPEED:
-          if (!this.speedBoostActive) {
-            this.speedBoostActive = true;
-            this.speedBoostStartTime = millis();
-            this.originalMaxVelocity = this.maxVelocity; // Almacenar la velocidad original
-            this.maxVelocity += 3; // Incrementar la velocidad máxima
-          }
-          break;
-    
-        case PowerUpType.CADENCY:
-          if (this.shootDelay > this.minShootDelay) {
-            this.shootDelay -= 100;
-          }
-          break;
-    
-        case PowerUpType.DOUBLE_POINTS:
-          doublePoints = true; // Activar puntos dobles
-          doublePointsActivation = millis();
-          break;
-    
-        case PowerUpType.FREEZE:
-          alienGroup.freezeActivation = millis();
-          alienGroup.freezealienshipgroup(); // Congelar alienígenas
-          break;
-    
-        case PowerUpType.NOENEMYBULLETS:
-          enemyBullets = []; // Eliminar balas enemigas
-          break;
-    
-        case PowerUpType.EXTRA_LIFE:
-          this.lifes++;
-          break;
-    
-        case PowerUpType.SHIELD:
-          this.hasShield = true;
-          this.shieldActivation = millis();
-          break;
-    
-        default:
-          console.warn("Tipo de power-up desconocido:", power.type);
-          break;
+          case PowerUpType.SPEED:
+              if (!this.speedBoostActive) {
+                  console.log("Activando SPEED");
+                  this.speedBoostActive = true;
+                  this.speedBoostStartTime = millis();
+                  this.originalMaxVelocity = this.maxVelocity; // Almacenar la velocidad original
+                  this.maxVelocity += 3; // Incrementar la velocidad máxima del jugador
+              }
+              break;
+  
+          case PowerUpType.CADENCY:
+              if (this.shootDelay > this.minShootDelay) {
+                  this.shootDelay -= 100;
+                  console.log("Nueva cadencia:", this.shootDelay);
+              }
+              break;
+  
+          case PowerUpType.DOUBLE_POINTS:
+              console.log("Activando DOUBLE_POINTS");
+              doublePoints = true;
+              doublePointsActivation = millis();
+              doublePointsDuration = DURATION_DOUBLE_POINTS;
+              break;
+  
+          case PowerUpType.FREEZE:
+              console.log("Activando FREEZE");
+              alienGroup.freezeActivation = millis();
+              alienGroup.freezeDuration = DURATION_FREEZE; // Asignar duración centralizada
+              alienGroup.freezealienshipgroup();
+              break;
+  
+          case PowerUpType.NOENEMYBULLETS:
+              console.log("Eliminando balas enemigas");
+              enemyBullets = [];
+              break;
+  
+          case PowerUpType.EXTRA_LIFE:
+              console.log("Ganando vida extra");
+              this.lifes++;
+              break;
+  
+          case PowerUpType.SHIELD:
+              console.log("Activando SHIELD");
+              this.hasShield = true;
+              this.shieldActivation = millis();
+              this.shieldDuration = DURATION_SHIELD; // Asignar duración centralizada
+              break;
+  
+          default:
+              console.warn("Tipo de power-up desconocido:", power.type);
+              break;
       }
-    
-      // Eliminar el power-up del arreglo global
+  
+      // Eliminar el power-up de la lista global
       let index = powerUps.indexOf(power);
       if (index !== -1) {
-        powerUps.splice(index, 1);
+          powerUps.splice(index, 1);
+          console.log("Power-up eliminado de la lista global.");
       }
-    }    
+  }     
   
     startDeathAnimation() {
       this.isDead = true;

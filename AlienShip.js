@@ -90,42 +90,42 @@ class AlienShip {
     }
   
     spawnPowerUp() {
-      let rand = random();
-      let spawnProbability = 0.25;
-      if (rand < spawnProbability) {
-        let powerUpPos = createVector(this.pos.x, this.pos.y);
-        let vel = random(1, 3);
-        let powerUpVel = createVector(0, vel);
-        let typePowerProb = random();
-        let type = 0;
-        let selected;
-        if (typePowerProb < 0.20) {
-          type = 0;
-          selected = shield;
-        } else if (typePowerProb < 0.34) {
-          type = 1;
-          selected = cadency;
-        } else if (typePowerProb < 0.5) {
-          type = 2;
-          selected = doublepoints;
-        } else if (typePowerProb < 0.7) {
-          type = 3;
-          selected = freeze;
-        } else if (typePowerProb < 0.85) {
-          type = 4;
-          selected = speed;
-        } else if (typePowerProb < 0.95) {
-          type = 5;
-          selected = nobullets;
-        } else {
-          type = 6;
-          selected = extralife;
-        }
-        return new PowerUp(PowerUpType[type], powerUpPos, 32, 32, powerUpVel, selected);
-      } else {
-        return null;
+      let spawnProbability = 0.25; // Probabilidad de generación
+      if (random() < spawnProbability) {
+          let powerUpPos = createVector(this.pos.x, this.pos.y);
+          let vel = random(1, 3);
+          let powerUpVel = createVector(0, vel);
+  
+          // Mapeo de probabilidades y tipos de power-ups
+          let powerUpTypes = [
+              { prob: 0.20, type: PowerUpType.SHIELD, image: shield },
+              { prob: 0.34, type: PowerUpType.CADENCY, image: cadency },
+              { prob: 0.50, type: PowerUpType.DOUBLE_POINTS, image: doublepoints },
+              { prob: 0.70, type: PowerUpType.FREEZE, image: freeze },
+              { prob: 0.85, type: PowerUpType.SPEED, image: speed },
+              { prob: 0.95, type: PowerUpType.NOENEMYBULLETS, image: nobullets },
+              { prob: 1.00, type: PowerUpType.EXTRA_LIFE, image: extralife },
+          ];
+  
+          // Determinar el tipo de power-up
+          let typePowerProb = random();
+          console.log("Random value for type selection:", typePowerProb);
+          for (let i = 0; i < powerUpTypes.length; i++) {
+              if (typePowerProb < powerUpTypes[i].prob) {
+                  console.log("Selected PowerUp:", powerUpTypes[i].type);
+                  return new PowerUp(
+                      powerUpTypes[i].type,
+                      powerUpPos,
+                      32,
+                      32,
+                      powerUpVel,
+                      powerUpTypes[i].image
+                  );
+              }
+          }
       }
-    }
+      return null; // No generar power-up
+  }  
   
     update() {
       this.move();
