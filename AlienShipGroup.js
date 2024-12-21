@@ -50,14 +50,19 @@ class AlienShipGroup {
       }
     
       if (!aliensAlive) {
-        if (level > enemyLevels.size) {
-          win(); // Manejar victoria si se completan todos los niveles
+        if (level >= enemyLevels.size) { // Corregido: usa >= para incluir el último nivel
+            winner = true; // Activar pantalla de victoria
+            if (highScore < actualScore) {
+                highScore = actualScore; // Actualizar high-score si es necesario
+            }
+            gameStarted = false;
+            gameConfigurated = false;
         } else if (!changelevel) {
-          level++;
-          changelevel = true; // Habilitar pantalla de transición entre niveles
-          time = millis();
+            level++;
+            changelevel = true; // Habilitar pantalla de transición entre niveles
+            time = millis();
         }
-      }            
+    }              
     
       if ((this.reachedRightEdge() && this.movingRight) || (this.reachedLeftEdge() && !this.movingRight)) {
         this.movingRight = !this.movingRight;

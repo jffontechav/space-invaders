@@ -73,17 +73,17 @@ function setup() {
 function draw() {
   if (!gameStarted && !gameOver && !winner) {
     startScreen();
-  } else if (gameOver) {
+} else if (gameOver) {
     gameOverScreen();
-  } else if (winner) { // Asegurar la pantalla de victoria
+} else if (winner) { // Pantalla de victoria
     WinScreen();
-  } else if (changelevel) {
+} else if (changelevel) {
     showlevel();
     if (millis() - time > 1200) { // Tiempo de transición
-      changelevel = false;
-      confignewlevel(); // Configurar el nuevo nivel tras la transición
+        changelevel = false;
+        confignewlevel(); // Configurar el nuevo nivel tras la transición
     }
-  }   else {
+} else {
     background(fondo);
     showLifes();
     ship.update();
@@ -196,11 +196,11 @@ function confignewlevel() {
 }
 
 function setupEnemiesForLevel() {
-  enemyLevels.set(1, [4, 3]);
-  enemyLevels.set(2, [5, 4]);
-  enemyLevels.set(3, [6, 5]);
-  enemyLevels.set(4, [7, 6]);
-  enemyLevels.set(5, [8, 7]);
+    enemyLevels.set(1, [4, 3]);
+    enemyLevels.set(2, [5, 4]);
+    enemyLevels.set(3, [6, 5]);
+    enemyLevels.set(4, [7, 6]);
+    enemyLevels.set(5, [8, 7]); // Nivel final
 }
 
 function renderPowerUps() {
