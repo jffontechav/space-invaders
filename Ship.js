@@ -168,7 +168,7 @@ class Ship {
           if (this.hasShield) {
             // Verificar si el sonido ya fue reproducido recientemente
             if (millis() - this.lastShieldSoundTime > 500) {
-              soundbrokenshield.setVolume(0.5); // Ajustar el volumen
+              soundbrokenshield.setVolume(1); // Ajustar el volumen
               soundbrokenshield.play();
               this.lastShieldSoundTime = millis(); // Registrar el tiempo del sonido
             }
@@ -265,7 +265,7 @@ class Ship {
     }
   
     isDeathAnimationFinished() {
-      s.setVolume(0.05);
+      soundshipdeath.setVolume(0.1);
       soundshipdeath.play();
       return millis() - this.deadAnimStartTime > this.deadAnimDuration * this.imagesDead.length;
     }
