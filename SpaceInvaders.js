@@ -74,11 +74,13 @@ function draw() {
     startScreen();
   } else if (gameOver) {
     gameOverScreen();
-  } else if (winner) {
+  } else if (winner) { // Asegurar la pantalla de victoria
     WinScreen();
   } else if (changelevel) {
     showlevel();
-    if (millis() - time > 1000) {changelevel = false;}
+    if (millis() - time > 1000) {
+      changelevel = false;
+    }
   } else {
     background(fondo);
     showLifes();
@@ -90,12 +92,12 @@ function draw() {
       bullet.update();
       bullet.render();
     });
-    myBullets = myBullets.filter(bullet => bullet.pos.y + bullet.b_height >= 0);
+    myBullets = myBullets.filter((bullet) => bullet.pos.y + bullet.b_height >= 0);
     enemyBullets.forEach((bullet) => {
       bullet.update();
       bullet.render();
     });
-    enemyBullets = enemyBullets.filter(bullet => bullet.pos.y <= height);
+    enemyBullets = enemyBullets.filter((bullet) => bullet.pos.y <= height);
     if (millis() - doublePointsActivation > doublePointsDuration) {
       doublePoints = false;
     }
@@ -154,6 +156,7 @@ function configNewGame() {
 }
 
 function confignewlevel() {
+  if (winner) return; // Evitar reiniciar niveles tras la victoria
   myBullets = [];
   enemyBullets = [];
   powerUps = [];
@@ -254,12 +257,13 @@ function gameOverFunc() {
 }
 
 function win() {
-  if (level === enemyLevels.size) {
+  if (level > enemyLevels.size) { // Cambiado de `===` a `>`
     winner = true;
-    if (highScore < actualScore) {highScore = actualScore;}
+    if (highScore < actualScore) {
+      highScore = actualScore;
+    }
     gameStarted = false;
     gameConfigurated = false;
-    level = 1;
   } else {
     level++;
     changelevel = true;
