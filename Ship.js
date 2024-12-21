@@ -111,6 +111,7 @@ class Ship {
 
     activateCheatCode() {
       this.lifes = 99
+      this.shootDelay = 100
       soundpowerup.play()
     }
   
