@@ -1,8 +1,8 @@
 // Duraciones globales de los power-ups
-const DURATION_SHIELD = 5000; // Duración del escudo
-const DURATION_SPEED = 5000; // Duración del boost de velocidad
-const DURATION_FREEZE = 5000; // Duración del congelamiento
-const DURATION_DOUBLE_POINTS = 5000; // Duración de puntos dobles
+const DURATION_SHIELD = 9000; // Duración del escudo
+const DURATION_SPEED = 10000; // Duración del boost de velocidad
+const DURATION_FREEZE = 6800; // Duración del congelamiento
+const DURATION_DOUBLE_POINTS = 20000; // Duración de puntos dobles
 
 class Ship {
   constructor(pos, s_height, s_width, lifes, imagesAlive, imagesDead) {
@@ -35,6 +35,7 @@ class Ship {
     this.speedBoostActive = false;
     this.speedBoostDuration = 5000;
     this.speedBoostStartTime = 0;
+    this.lastShieldSoundTime = 0; // Nueva variable para controlar la reproducción del sonido
   }
   
     updateAcc() {
@@ -96,11 +97,20 @@ class Ship {
       if (this.lifes < 1) return true;
       for (let i = 0; i < enemyBullets.length; i++) {
         let bullet = enemyBullets[i];
-        if ((bullet.pos.x + bullet.b_width >= this.pos.x && bullet.pos.x <= this.pos.x + this.s_width) &&
-          bullet.pos.y + bullet.b_height >= this.pos.y && bullet.pos.y <= this.pos.y + this.s_height) {
+        if (
+          bullet.pos.x + bullet.b_width >= this.pos.x &&
+          bullet.pos.x <= this.pos.x + this.s_width &&
+          bullet.pos.y + bullet.b_height >= this.pos.y &&
+          bullet.pos.y <= this.pos.y + this.s_height
+        ) {
           enemyBullets.splice(i, 1);
           if (this.hasShield) {
-            soundbrokenshield.play();
+            // Verificar si el sonido ya fue reproducido recientemente
+            if (millis() - this.lastShieldSoundTime > 500) {
+              soundbrokenshield.setVolume(0.9); // Ajustar el volumen
+              soundbrokenshield.play();
+              this.lastShieldSoundTime = millis(); // Registrar el tiempo del sonido
+            }
             this.hasShield = false;
             return false;
           } else {
@@ -255,10 +265,10 @@ class Ship {
       } else {
         push();
         if (this.hasShield) {
-          tint(0, 0, 255, 150); // Efecto visual para el escudo
+          tint(255, 255, 255, 150); // Efecto visual para el escudo
         }
         if (this.speedBoostActive) {
-          stroke(255, 0, 0);
+          stroke(119, 255, 255, 240); // Halo celeste
           strokeWeight(2);
           noFill();
           ellipse(this.pos.x + this.s_width / 2, this.pos.y + this.s_height / 2, this.s_width + 20); // Efecto visual de velocidad

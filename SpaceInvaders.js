@@ -217,12 +217,13 @@ function renderPowerUps() {
 function showLifes() {
   textSize(20);
   fill(255);
-  let shipX = width * 0.02 + 40;
-  let shipY = height * 0.92;
-  let textX = shipX - 20;
-  let textY = shipY + 15;
-  image(imagesShipAlive[0], shipX, shipY, 30, 30);
-  text("x" + ship.lifes, textX, textY);
+  let shipX = width - 40 - 30; // Margen desde la derecha (imagen: 30 px de ancho)
+  let shipY = height * 0.92; // Mantener la posición vertical
+  let textX = shipX - 30; // Posición del texto justo a la izquierda de la imagen
+  let textY = shipY + 15; // Mantener la posición vertical del texto
+  // Dibujar la imagen de la nave y el texto
+  image(imagesShipAlive[0], shipX, shipY, 30, 30); // Imagen de la nave
+  text("×" + ship.lifes, textX, textY); // Texto con el número de vidas
 }
 
 function showScore() {
