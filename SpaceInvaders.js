@@ -16,10 +16,13 @@ let spritesRootPath;
 let audioRootPath;
 let doublePoints;
 let doublePointsActivation, doublePointsDuration = 5000, time;
-let gameStarted = false, gameOver = false, gameConfigurated = false, winner = false;
+let gameStarted = false; 
+let gameOver = false; 
+let gameConfigurated = false; 
+let winner = false; 
+let changelevel = false; // Asegurar inicialización
 let actualScore, highScore = 0; // Inicializar highScore en 0
 let soundshoot, soundshipdeath, soundinvader, soundpowerup, soundgameover, soundbrokenshield;
-let changelevel;
 
 let enemyLevels = new Map();
 
@@ -69,19 +72,20 @@ function setup() {
   configNewGame();
 }
 
-if (!gameStarted && !gameOver && !winner && !changelevel) {
-  startScreen();
-} else if (gameOver) {
-  gameOverScreen();
-} else if (winner && gameStarted) { // Mostrar pantalla de victoria solo si el juego comenzó
-  WinScreen();
-} else if (changelevel) {
-  showlevel();
-  if (millis() - time > 1200) {
-    changelevel = false;
-    confignewlevel(); // Configurar el nuevo nivel tras la transición
-  }
-} else {
+function draw() {
+  if (!gameStarted && !gameOver && !winner && !changelevel) {
+    startScreen(); // Mostrar pantalla de inicio
+  } else if (gameOver) {
+    gameOverScreen(); // Mostrar pantalla de Game Over
+  } else if (winner) { // Mostrar pantalla de victoria
+    WinScreen();
+  } else if (changelevel) { // Transición de nivel
+    showlevel();
+    if (millis() - time > 1200) {
+      changelevel = false;
+      confignewlevel(); // Configurar el nuevo nivel tras la transición
+    }
+  } else {
     background(fondo);
     showLifes();
     ship.update();
@@ -107,7 +111,7 @@ if (!gameStarted && !gameOver && !winner && !changelevel) {
       gameOverFunc();
     }
     showScore();
-  }
+  }}
 
 function keyPressed() {
   if (winner) {
@@ -138,15 +142,15 @@ function startScreen() {
 
 function startGame() {
   if (gameOver || winner) {
-    gameConfigurated = false;
     gameOver = false;
-    winner = false; // Reiniciar el estado de victoria
+    winner = false;
   }
   if (!gameConfigurated) {
     configNewGame();
     gameConfigurated = true;
   }
-  gameStarted = true;
+  gameStarted = true; // Iniciar el juego correctamente
+  changelevel = false; // Reiniciar transición de nivel
 }
 
 function configNewGame() {
