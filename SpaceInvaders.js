@@ -16,7 +16,7 @@ let spritesRootPath;
 let audioRootPath;
 let doublePoints;
 let doublePointsActivation, doublePointsDuration = 5000, time;
-let gameStarted = false, gameOver = false, gameConfigurated = false, winner = false;
+let gameStarted = false, gameOver = false, gameConfigurated = true, winner = false;
 let actualScore, highScore = 0; // Inicializar highScore en 0
 let soundshoot, soundshipdeath, soundinvader, soundpowerup, soundgameover, soundbrokenshield;
 let changelevel;
@@ -63,7 +63,7 @@ function preload() {
 function setup() {
   createCanvas(1080, 720);
   let volume = 0.01;
-  gameStarted = false, gameOver = false, gameConfigurated = false, winner = false;
+  gameStarted = false, gameOver = false, gameConfigurated = true, winner = false;
   s = new p5.SoundFile();
   s.setVolume(volume);
   setupEnemiesForLevel();
