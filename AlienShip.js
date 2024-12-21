@@ -71,7 +71,7 @@ class AlienShip {
     }
   
     isDeathAnimationFinished() {
-      return millis() - this.deadAnimStartTime > this.deadAnimDuration * this.imagesDead.length;
+      return millis() - this.deadAnimStartTime > this.deadAnimDuration;
     }
   
     move() {
@@ -127,17 +127,20 @@ class AlienShip {
       return null; // No generar power-up
   }  
   
-    update() {
-      this.move();
-      if (this.canShoot) {
-        this.shoot();
-      }
-      this.isDeath();
-      if (millis() - this.prevMillis > this.imageDelay) {
-        this.imageState = (this.imageState + 1) % this.maxImageStates;
-        this.prevMillis = millis();
-      }
+  update() {
+    this.move();
+    if (this.canShoot) {
+      this.shoot();
     }
+    this.isDeath();
+    if (this.isDead && this.isDeathAnimationFinished()) {
+      this.isDead = false; // Limpia la animación de muerte
+    }
+    if (millis() - this.prevMillis > this.imageDelay) {
+      this.imageState = (this.imageState + 1) % this.maxImageStates;
+      this.prevMillis = millis();
+    }
+  }
   
     render() {
       if (this.isDead) {

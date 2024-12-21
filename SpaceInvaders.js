@@ -94,13 +94,9 @@ function draw() {
       bullet.update();
       bullet.render();
     });
-    myBullets = myBullets.filter((bullet) => bullet.pos.y + bullet.b_height >= 0);
-    enemyBullets.forEach((bullet) => {
-      bullet.update();
-      bullet.render();
-    });
-    enemyBullets = enemyBullets.filter((bullet) => bullet.pos.y <= height);
-    powerUps = powerUps.filter((powerup) => powerup.pos.y <= height);
+    myBullets = myBullets.filter((bullet) => bullet.isActive);
+    enemyBullets = enemyBullets.filter((bullet) => bullet.isActive);
+    powerUps = powerUps.filter((powerup) => powerup.active);
     if (millis() - doublePointsActivation > doublePointsDuration) {
       doublePoints = false;
     }

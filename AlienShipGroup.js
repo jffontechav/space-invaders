@@ -43,7 +43,7 @@ class AlienShipGroup {
                 this.alienShipGrid[i][j].canShoot = false;
                 this.lastShoot(this.alienShipGrid[i][j], j);
               }
-              this.alienShipGrid[i][j] = null;
+              this.alienShipGrid[i][j] = null; // Elimina el alienígena
             }
           }
         }

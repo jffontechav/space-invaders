@@ -17,5 +17,8 @@ class PowerUp {
     // Método update para actualizar el power-up
     update() {
       this.pos.add(this.vel);
-    }
+      if (this.pos.y > height) {
+        this.active = false; // Marca el power-up como inactivo
+      }
+    }    
   }
