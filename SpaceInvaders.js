@@ -100,6 +100,7 @@ function draw() {
       bullet.render();
     });
     enemyBullets = enemyBullets.filter((bullet) => bullet.pos.y <= height);
+    powerUps = powerUps.filter((powerup) => powerup.pos.y <= height);
     if (millis() - doublePointsActivation > doublePointsDuration) {
       doublePoints = false;
     }
