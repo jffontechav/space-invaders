@@ -16,7 +16,7 @@ let spritesRootPath;
 let audioRootPath;
 let doublePoints;
 let doublePointsActivation, doublePointsDuration = 5000, time;
-let gameStarted = false, gameOver = false, gameConfigurated = true, winner = false;
+let gameStarted = false, gameOver = false, gameConfigurated = false, winner = false;
 let actualScore, highScore = 0; // Inicializar highScore en 0
 let soundshoot, soundshipdeath, soundinvader, soundpowerup, soundgameover, soundbrokenshield;
 let changelevel;
@@ -69,20 +69,19 @@ function setup() {
   configNewGame();
 }
 
-function draw() {
-  if (!gameStarted && !gameOver && !winner) {
-    startScreen();
-  } else if (gameOver) {
-    gameOverScreen();
-  } else if (winner) { // Asegurar la pantalla de victoria
-    WinScreen();
-  } else if (changelevel) {
-    showlevel();
-    if (millis() - time > 1200) { // Tiempo de transición
-      changelevel = false;
-      confignewlevel(); // Configurar el nuevo nivel tras la transición
-    }
-  }   else {
+if (!gameStarted && !gameOver && !winner && !changelevel) {
+  startScreen();
+} else if (gameOver) {
+  gameOverScreen();
+} else if (winner && gameStarted) { // Mostrar pantalla de victoria solo si el juego comenzó
+  WinScreen();
+} else if (changelevel) {
+  showlevel();
+  if (millis() - time > 1200) {
+    changelevel = false;
+    confignewlevel(); // Configurar el nuevo nivel tras la transición
+  }
+} else {
     background(fondo);
     showLifes();
     ship.update();
@@ -109,7 +108,6 @@ function draw() {
     }
     showScore();
   }
-}
 
 function keyPressed() {
   if (winner) {
@@ -139,9 +137,10 @@ function startScreen() {
 }
 
 function startGame() {
-  if (gameOver) {
+  if (gameOver || winner) {
     gameConfigurated = false;
     gameOver = false;
+    winner = false; // Reiniciar el estado de victoria
   }
   if (!gameConfigurated) {
     configNewGame();
@@ -221,7 +220,7 @@ function showLifes() {
   fill(255);
   let shipX = width - 40 - 30; // Margen desde la derecha (imagen: 30 px de ancho)
   let shipY = height * 0.92; // Mantener la posición vertical
-  let textX = shipX - 30; // Posición del texto justo a la izquierda de la imagen
+  let textX = shipX - 20; // Posición del texto justo a la izquierda de la imagen
   let textY = shipY + 15; // Mantener la posición vertical del texto
   // Dibujar la imagen de la nave y el texto
   image(imagesShipAlive[0], shipX, shipY, 30, 30); // Imagen de la nave
