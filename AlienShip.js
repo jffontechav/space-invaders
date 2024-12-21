@@ -83,6 +83,7 @@ class AlienShip {
   
     shoot() {
       if (millis() - this.lastShotTime < this.shotDelay) return;
+      console.log("Shooting")
       let bulletVel = createVector(0, random(2, 4));
       let bulletPos = this.pos.copy().add(this.s_width / 2, 0);
       this.lastShotTime = millis();
@@ -129,13 +130,15 @@ class AlienShip {
   
   update() {
     this.move();
-    if (this.canShoot) {
+    if (this.canShoot){
       this.shoot();
     }
     this.isDeath();
+    /*
     if (this.isDead && this.isDeathAnimationFinished()) {
       this.isDead = false; // Limpia la animación de muerte
     }
+    */
     if (millis() - this.prevMillis > this.imageDelay) {
       this.imageState = (this.imageState + 1) % this.maxImageStates;
       this.prevMillis = millis();

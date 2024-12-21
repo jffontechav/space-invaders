@@ -155,7 +155,7 @@ class Ship {
   
     isDeath() {
       if (this.lifes < 1) return true;
-      for (let i = 0; i < enemyBullets.length; i++) {
+      for (let i = enemyBullets.length - 1; i >= 0; i--) {
         let bullet = enemyBullets[i];
         if (
           bullet.pos.x + bullet.b_width >= this.pos.x &&

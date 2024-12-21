@@ -94,6 +94,10 @@ function draw() {
       bullet.update();
       bullet.render();
     });
+    enemyBullets.forEach((bullet) => {
+      bullet.update();
+      bullet.render();
+    });
     myBullets = myBullets.filter((bullet) => bullet.isActive);
     enemyBullets = enemyBullets.filter((bullet) => bullet.isActive);
     powerUps = powerUps.filter((powerup) => powerup.active);
