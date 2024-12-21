@@ -16,13 +16,10 @@ let spritesRootPath;
 let audioRootPath;
 let doublePoints;
 let doublePointsActivation, doublePointsDuration = 5000, time;
-let gameStarted = false; 
-let gameOver = false; 
-let gameConfigurated = false; 
-let winner = false; 
-let changelevel = false; // Asegurar inicialización
+let gameStarted = false, gameOver = false, gameConfigurated = true, winner = false;
 let actualScore, highScore = 0; // Inicializar highScore en 0
 let soundshoot, soundshipdeath, soundinvader, soundpowerup, soundgameover, soundbrokenshield;
+let changelevel;
 
 let enemyLevels = new Map();
 
@@ -73,19 +70,19 @@ function setup() {
 }
 
 function draw() {
-  if (!gameStarted && !gameOver && !winner && !changelevel) {
-    startScreen(); // Mostrar pantalla de inicio
+  if (!gameStarted && !gameOver && !winner) {
+    startScreen();
   } else if (gameOver) {
-    gameOverScreen(); // Mostrar pantalla de Game Over
-  } else if (winner) { // Mostrar pantalla de victoria
+    gameOverScreen();
+  } else if (winner) { // Asegurar la pantalla de victoria
     WinScreen();
-  } else if (changelevel) { // Transición de nivel
+  } else if (changelevel) {
     showlevel();
-    if (millis() - time > 1200) {
+    if (millis() - time > 1200) { // Tiempo de transición
       changelevel = false;
       confignewlevel(); // Configurar el nuevo nivel tras la transición
     }
-  } else {
+  }   else {
     background(fondo);
     showLifes();
     ship.update();
@@ -111,7 +108,8 @@ function draw() {
       gameOverFunc();
     }
     showScore();
-  }}
+  }
+}
 
 function keyPressed() {
   if (winner) {
@@ -141,16 +139,15 @@ function startScreen() {
 }
 
 function startGame() {
-  if (gameOver || winner) {
+  if (gameOver) {
+    gameConfigurated = false;
     gameOver = false;
-    winner = false;
   }
   if (!gameConfigurated) {
     configNewGame();
     gameConfigurated = true;
   }
-  gameStarted = true; // Iniciar el juego correctamente
-  changelevel = false; // Reiniciar transición de nivel
+  gameStarted = true;
 }
 
 function configNewGame() {
@@ -224,7 +221,7 @@ function showLifes() {
   fill(255);
   let shipX = width - 40 - 30; // Margen desde la derecha (imagen: 30 px de ancho)
   let shipY = height * 0.92; // Mantener la posición vertical
-  let textX = shipX - 20; // Posición del texto justo a la izquierda de la imagen
+  let textX = shipX - 30; // Posición del texto justo a la izquierda de la imagen
   let textY = shipY + 15; // Mantener la posición vertical del texto
   // Dibujar la imagen de la nave y el texto
   image(imagesShipAlive[0], shipX, shipY, 30, 30); // Imagen de la nave
