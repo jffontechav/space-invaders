@@ -167,7 +167,7 @@ class Ship {
           if (this.hasShield) {
             // Verificar si el sonido ya fue reproducido recientemente
             if (millis() - this.lastShieldSoundTime > 500) {
-              soundbrokenshield.setVolume(0.9); // Ajustar el volumen
+              soundbrokenshield.setVolume(0.5); // Ajustar el volumen
               soundbrokenshield.play();
               this.lastShieldSoundTime = millis(); // Registrar el tiempo del sonido
             }
