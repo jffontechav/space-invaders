@@ -38,6 +38,7 @@ class Ship {
     this.lastShieldSoundTime = 0; // Nueva variable para controlar la reproducción del sonido
     this.trail = []; // Array para guardar la estela de posiciones
     this.trailLimit = 10; // Límite del número de posiciones en la estela
+    this.konami = 0;
   }
   
     updateAcc() {
@@ -54,6 +55,63 @@ class Ship {
       } else if (k === 32) {
         this.isShooting = b;
       }
+      this.superCoolStuff(k, b)
+    }
+
+    superCoolStuff(k, b) {
+      if (b === false) {
+        if (k === UP_ARROW) {
+          if (this.konami === 0 || this.konami === 1) {
+            this.konami++;
+          } else {
+            this.konami = 0;
+          }
+        } else if (k === DOWN_ARROW) {
+          if (this.konami === 2 || this.konami === 3) {
+            this.konami++;
+          } else {
+            this.konami = 0;
+          }
+        } else if (k === LEFT_ARROW) {
+          if (this.konami === 4 || this.konami === 6) {
+            this.konami++;
+          } else {
+            this.konami = 0;
+          }
+        } else if (k === RIGHT_ARROW) {
+          if (this.konami === 5 || this.konami === 7) {
+            this.konami++;
+          } else {
+            this.konami = 0;
+          }
+        } else if (k === 66) { // 'B' key
+          if (this.konami === 8) {
+            this.konami++;
+          } else {
+            this.konami = 0;
+          }
+        } else if (k === 65) { // 'A' key
+          if (this.konami === 9) {
+            this.konami++;
+          } else {
+            this.konami = 0;
+          }
+        } else if (k === ENTER) { // 'Enter' key
+          if (this.konami === 10) {
+            this.konami = 0;
+            this.activateCheatCode();
+          } else {
+            this.konami = 0;
+          }
+        } else {
+          this.konami = 0;
+        }
+      }
+    }
+
+    activateCheatCode() {
+      this.lifes = 99
+      soundpowerup.play()
     }
   
     collision() {
