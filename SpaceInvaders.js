@@ -227,14 +227,17 @@ function showLifes() {
 }
 
 function showScore() {
-  textAlign(CENTER, CENTER);
+  textAlign(LEFT, CENTER); // Alinear el texto desde la izquierda
   fill(230, 158, 4);
   textSize(24);
-  text("SCORE: " + actualScore, width * 0.05, height * 0.03);
+  text("SCORE: " + actualScore, width * 0.05 + 10, height * 0.03); // Ajustar la posición ligeramente hacia la derecha
+  textAlign(CENTER, CENTER);
   textSize(16);
   text("HIGH-SCORE: " + (highScore || 0), width / 2, height * 0.03); // Mostrar 0 si no está definido
-  text("LEVEL " + level, width * 0.95, height * 0.03);
+  textAlign(RIGHT, CENTER); // Alinear desde la derecha
+  text("LEVEL " + level, width * 0.95 - 10, height * 0.03); // Ajustar la posición ligeramente hacia la izquierda
   if (doublePoints) {
+    textAlign(CENTER, CENTER);
     fill(135, 239, 254);
     text("POINTS ×2!", width * 0.25, height * 0.03);
   }
