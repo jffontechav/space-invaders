@@ -175,7 +175,8 @@ class Ship {
             return false;
           } else {
             this.loseOneLife();
-            if (this.lifes < 1) return true;
+            if (this.lifes < 1) {return true};
+            return false;
           }
         }
       }
