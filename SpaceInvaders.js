@@ -78,10 +78,11 @@ function draw() {
     WinScreen();
   } else if (changelevel) {
     showlevel();
-    if (millis() - time > 1000) {
+    if (millis() - time > 1200) { // Tiempo de transición
       changelevel = false;
+      confignewlevel(); // Configurar el nuevo nivel tras la transición
     }
-  } else {
+  }   else {
     background(fondo);
     showLifes();
     ship.update();
@@ -156,7 +157,7 @@ function configNewGame() {
 }
 
 function confignewlevel() {
-  if (winner) return; // Evitar reiniciar niveles tras la victoria
+  if (changelevel) return; // Evitar conflictos durante la transición
   myBullets = [];
   enemyBullets = [];
   powerUps = [];
@@ -165,6 +166,7 @@ function confignewlevel() {
   enemyRows = levelConfig[1];
 
   alienShipGrid = Array.from({ length: enemyRows }, () => Array(enemies).fill(null));
+  // Configurar enemigos para el nuevo nivel
   for (let j = 0; j < enemyRows; j++) {
     let imagesAlive;
     let imagesDead;
@@ -259,21 +261,16 @@ function gameOverFunc() {
   level = 1;
 }
 
-function win() {
-  // Se considera la victoria si no quedan enemigos
-  if (level > enemyLevels.size || alienGroup.alienShipGrid.flat().every(alien => alien === null)) {
-    winner = true;
-    if (highScore < actualScore) {
-      highScore = actualScore;
-    }
-    gameStarted = false;
-    gameConfigurated = false;
-  } else {
-    level++;
-    changelevel = true;
-    time = millis();
-    confignewlevel();
+if (level > enemyLevels.size || alienGroup.alienShipGrid.flat().every(alien => alien === null)) {
+  winner = true;
+  if (highScore < actualScore) {
+    highScore = actualScore;
   }
+  gameStarted = false;
+  gameConfigurated = false;
+} else if (!changelevel) {
+  changelevel = true;
+  time = millis(); // Iniciar transición de nivel
 }
 
 function gameOverScreen() {

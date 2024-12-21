@@ -51,11 +51,13 @@ class AlienShipGroup {
     
       if (!aliensAlive) {
         if (level > enemyLevels.size) {
-          win();
-        } else {
-          confignewlevel();
+          win(); // Manejar victoria si se completan todos los niveles
+        } else if (!changelevel) {
+          level++;
+          changelevel = true; // Habilitar pantalla de transición entre niveles
+          time = millis();
         }
-      }      
+      }            
     
       if ((this.reachedRightEdge() && this.movingRight) || (this.reachedLeftEdge() && !this.movingRight)) {
         this.movingRight = !this.movingRight;
