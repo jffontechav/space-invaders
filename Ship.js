@@ -36,6 +36,8 @@ class Ship {
     this.speedBoostDuration = 5000;
     this.speedBoostStartTime = 0;
     this.lastShieldSoundTime = 0; // Nueva variable para controlar la reproducción del sonido
+    this.trail = []; // Array para guardar la estela de posiciones
+    this.trailLimit = 10; // Límite del número de posiciones en la estela
   }
   
     updateAcc() {
@@ -228,6 +230,16 @@ class Ship {
       this.pos.add(this.vel);
       this.collision();
     
+      // Actualizar la estela si el efecto SPEED está activo
+      if (this.speedBoostActive) {
+        this.trail.push(this.pos.copy());
+        if (this.trail.length > this.trailLimit) {
+          this.trail.shift(); // Eliminar posiciones antiguas
+        }
+      } else {
+        this.trail = []; // Limpiar la estela cuando SPEED no está activo
+      }
+    
       if (!this.isDead) this.shoot();
     
       // Desactivar el escudo si el tiempo ha expirado
@@ -251,7 +263,7 @@ class Ship {
         this.imageState = (this.imageState + 1) % this.maxImageStates;
         this.prevMillis = millis();
       }
-    }     
+    }         
   
     render() {
       if (this.isDead) {
@@ -264,17 +276,27 @@ class Ship {
         }
       } else {
         push();
+    
+        // Efecto visual del escudo (SHIELD)
         if (this.hasShield) {
-          tint(255, 255, 255, 150); // Efecto visual para el escudo
-        }
-        if (this.speedBoostActive) {
           stroke(119, 255, 255, 240); // Halo celeste
           strokeWeight(2);
           noFill();
-          ellipse(this.pos.x + this.s_width / 2, this.pos.y + this.s_height / 2, this.s_width + 20); // Efecto visual de velocidad
+          ellipse(this.pos.x + this.s_width / 2, this.pos.y + this.s_height / 2, this.s_width + 20);
         }
+    
+        // Efecto visual de estela (SPEED)
+        if (this.speedBoostActive) {
+          for (let i = 0; i < this.trail.length; i++) {
+            let t = this.trail[i];
+            fill(119, 255, 255, 50 - (i * 5)); // Color tenue con opacidad decreciente
+            noStroke();
+            rect(t.x, t.y, this.s_width, this.s_height); // Dibujar la estela
+          }
+        }
+    
         image(this.imagesAlive[this.imageState], this.pos.x, this.pos.y, this.s_width, this.s_height);
         pop();
       }
-    }    
+    }       
   }

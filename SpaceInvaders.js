@@ -17,7 +17,7 @@ let audioRootPath;
 let doublePoints;
 let doublePointsActivation, doublePointsDuration = 5000, time;
 let gameStarted = false, gameOver = false, gameConfigurated = true, winner = false;
-let actualScore, highScore;
+let actualScore, highScore = 0; // Inicializar highScore en 0
 let soundshoot, soundshipdeath, soundinvader, soundpowerup, soundgameover, soundbrokenshield;
 let changelevel;
 
@@ -228,16 +228,15 @@ function showLifes() {
 
 function showScore() {
   textAlign(CENTER, CENTER);
+  fill(230, 158, 4);
   textSize(24);
-  text("SCORE: " + actualScore, width * 0.05, height * 0.01);
+  text("SCORE: " + actualScore, width * 0.05, height * 0.03);
   textSize(16);
-  text("HIGH-SCORE: " + highScore, width / 2, height * 0.01);
-  text("LEVEL " + level, width * 0.95, height * 0.01);
-
-  // Mostrar indicador visual de puntos dobles
+  text("HIGH-SCORE: " + (highScore || 0), width / 2, height * 0.03); // Mostrar 0 si no está definido
+  text("LEVEL " + level, width * 0.95, height * 0.03);
   if (doublePoints) {
-    fill(255, 215, 0); // Color dorado para destacar
-    text("POINTS X2!", width * 0.25, height * 0.01);
+    fill(135, 239, 254);
+    text("POINTS ×2!", width * 0.25, height * 0.03);
   }
 }
 
@@ -258,7 +257,8 @@ function gameOverFunc() {
 }
 
 function win() {
-  if (level > enemyLevels.size) { // Cambiado de `===` a `>`
+  // Se considera la victoria si no quedan enemigos
+  if (level > enemyLevels.size || alienGroup.alienShipGrid.flat().every(alien => alien === null)) {
     winner = true;
     if (highScore < actualScore) {
       highScore = actualScore;
@@ -282,7 +282,7 @@ function gameOverScreen() {
   textSize(24);
   text("Score: " + actualScore, width / 2, height / 2);
   textSize(16);
-  text("Presiona cualquier tecla para volver al inicio", width / 2, height / 2 + 50);
+  text("Presiona cualquier tecla para jugar de nuevo", width / 2, height / 2 + 50);
 }
 
 function WinScreen() {
@@ -290,11 +290,11 @@ function WinScreen() {
   fill(255);
   textAlign(CENTER, CENTER);
   textSize(32);
-  text("¡YOU WIN!", width / 2, height / 2 - 50);
+  text("YOU WIN!", width / 2, height / 2 - 50);
   textSize(24);
   text("Score: " + actualScore, width / 2, height / 2);
   textSize(16);
-  text("Presiona cualquier tecla para volver al inicio", width / 2, height / 2 + 50);
+  text("Presiona cualquier tecla para jugar de nuevo", width / 2, height / 2 + 50);
 }
 
 function loadImages(spriteName, n_images, i = 0, images = []) {

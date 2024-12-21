@@ -49,7 +49,13 @@ class AlienShipGroup {
         }
       }
     
-      if (!aliensAlive) win();
+      if (!aliensAlive) {
+        if (level > enemyLevels.size) {
+          win();
+        } else {
+          confignewlevel();
+        }
+      }      
     
       if ((this.reachedRightEdge() && this.movingRight) || (this.reachedLeftEdge() && !this.movingRight)) {
         this.movingRight = !this.movingRight;
@@ -170,13 +176,12 @@ class AlienShipGroup {
           let alien = this.alienShipGrid[i][j];
           if (alien != null) {
             alien.pos.y += alien.s_height / 2;
-            if (abs(alien.vel.x) < 3) {
-              alien.vel.x *= 1.2;
-            } else if (abs(alien.vel.x) < 6) {
-              alien.vel.x *= 1.15;
-            } else if (abs(alien.vel.x) < this.maxSpeed) {
-              alien.vel.x *= 1.08;
-            }
+            if (abs(alien.vel.x) < this.maxSpeed) {
+              alien.vel.x *= 1.1; // Incremento controlado
+              if (abs(alien.vel.x) > this.maxSpeed) {
+                alien.vel.x = this.maxSpeed * Math.sign(alien.vel.x); // Límite estricto
+              }
+            }            
           }
         }
       }
