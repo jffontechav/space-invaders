@@ -1,4 +1,4 @@
-# space-invaders
+# Metroid themed Space Invaders 
 Computación Visual 2024-2. Tarea 1.
 
 Iniciar:
