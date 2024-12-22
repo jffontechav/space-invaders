@@ -8,4 +8,8 @@ Controles: La nave puede desplazarse de izquierda a derecha usando las teclas co
 
 Misión: Derrote los 5 niveles llenos de enemigos para conseguir la victoria, al derribar a las naves enemigas puede conseguir mejoras temporales que le ayudarán a enfrentar sus números.
 
-Proyecto realizado por: Brayan Camilo Rodríguez Díaz Fernando Novoa Salazar Juan Felipe Fontecha Vasquez Juan David Vásquez Pinzón
+Proyecto realizado por: 
+Brayan Camilo Rodríguez Díaz 
+Fernando Novoa Salazar 
+Juan Felipe Fontecha Vasquez 
+Juan David Vásquez Pinzón
